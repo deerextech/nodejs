@@ -6,7 +6,6 @@ var geocodeAddress = (callback) =>{
 
   var encodedAddress = encodeURIComponent(argv.address);
 
-  console.log('what is argv outputting??????', argv);
   //make request
   request({
     url: `http://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}`,
