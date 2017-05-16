@@ -1,7 +1,7 @@
 const request = require('request');
 const yargs = require('./yargsConfig');
 
-const geocodeAddress = () =>{
+var geocodeAddress = (callback) =>{
   const argv = yargs.argv;
 
   var encodedAddress = encodeURIComponent(argv.address);
@@ -15,13 +15,15 @@ const geocodeAddress = () =>{
     json:true
   },(error, response, body)=>{
     if(error){
-      console.log('unable to connect to Google servers.');
+      callback('unable to connect to Google servers.');
     }else if(body.status === 'ZERO_RESULTS'){
-      console.log('unable to find that address');
+      callback('unable to find that address');
     }else if(body.status === 'OK'){
-      console.log(`Address: ${body.results[0].formatted_address}`);
-      console.log(`Latitude: ${body.results[0].geometry.location.lat}`);
-      console.log(`Longitude: : ${body.results[0].geometry.location.lng}`);
+      callback(undefined, {
+        address: body.results[0].formatted_address,
+        latitude:body.results[0].geometry.location.lat,
+        longitude: body.results[0].geometry.location.lng
+      });
     }
   });
 }
