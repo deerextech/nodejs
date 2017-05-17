@@ -10,16 +10,25 @@ hbs.registerPartials(__dirname + '/views/partials');
 //__dir name that gets passed into file, and stores path to web node server
 app.use(express.static(__dirname + '/public'));
 
+app.use((req, res, next)=>{
+  var now = new Date().toString();
+  console.log(`DATE IS: ${now}: ${req.method} ${req.url}`);
+  next();
+});
+
 hbs.registerHelper('getCurrentYear', ()=>{
   return new Date().getFullYear();
-})
+});
 
+hbs.registerHelper('yell', (text)=>{
+  return text.toUpperCase();
+});
 
 app.get('/',(req, res)=>{
   res.render('home.hbs',{
     welcomeMessage: 'This is CAAAARL',
     image:'http://www.deerexart.com/images/IMG_0278.jpg',
-  })
+  });
 });
 
 app.get('/about', (req,res)=>{
@@ -27,6 +36,7 @@ app.get('/about', (req,res)=>{
     pageTitle: 'About Carl!',
   });
 });
+
 app.get('/bad',(req,res)=>{
   res.send({
     errorMessage:'unable to handle request'
